@@ -7,17 +7,14 @@
  */
 
 /*
-
-/*
 TODO:
 • handle (not currently used, but some user might manually edit) crontabs with   * / 2   1,2,3,4,5   1-4,5 hours or days
 
 ENHANCEMENTS:
-show current wifi state in a text box above the tables - the only way to see if wifi is up is via ifconfig/iwconfig
 2 buttons with manual WiFi up & WiFi down (toggle disabled)
-A disclosure triangle to show actual crontabs
+A disclosure triangle to show actual crontabs - I don't think is needed.
+  It would just confuse new users when the summary presents a natural language representation of the crontabs.
 */
-
 
 //var showCronTabs=true; //comment this in to show the raw crontabs
 var showCronTabs=false  //comment this in to not show the raw crontabs
@@ -499,27 +496,6 @@ function CronTabsToTables() {
 	FinalizeTables(end_state);
 }
 
-function FindThisTime(day_of_week, an_hour) {
-	var this_hour = eval(an_hour);
-	var target_cell = "";
-
-	if (timerMode == 1) { 
-		target_cell=document.getElementById("tab1_timeTable").rows[ (eval(this_hour) < 12 ? 1 : 4) ].cells[ (this_hour < 12 ? this_hour : this_hour-12) ].value;
-	} else if (timerMode == 3) {
-		if (eval(day_of_week) == 0) {
-			target_cell=document.getElementById("tab1_timeTable").rows[ (eval(this_hour) < 12 ? 1 : 4) ].cells[ (this_hour < 12 ? this_hour : this_hour-12) ].value;
-		} else if (eval(day_of_week) == 6) {
-			target_cell=document.getElementById("tab3_timeTable").rows[ (eval(this_hour) < 12 ? 1 : 4) ].cells[ (this_hour < 12 ? this_hour : this_hour-12) ].value;
-		} else {
-			target_cell=document.getElementById("tab2_timeTable").rows[ (eval(this_hour) < 12 ? 1 : 4) ].cells[ (this_hour < 12 ? this_hour : this_hour-12) ].value;
-		}
-	} else if (timerMode == 7) {
-		
-		target_cell=document.getElementById("tab" + (1+eval(day_of_week)) + "_timeTable").rows[ (this_hour < 12 ? 1 : 4) ].cells[ (this_hour < 12 ? this_hour : this_hour-12) ].value;
-	}
-	return target_cell;
-}
-
 function FindThisTimeTwo() {
 	var previous_wifi_state = FindTerminalWifiState(); //cell represents the terminal wifi state of the cycle
 	for ( var i=0; i <= current_wifi[3]; i++ ) {
@@ -622,19 +598,7 @@ function LoadCrontabs() {
 	} else {
 		setChildText("wlan_status", (wifi_status.toString().length > 15 ? "active" : "disabled") );
 	}
-	
-	/*if (found_wifi_cron_tabs.length > 0 && timerMode > 0) {
-		var this_hour = FindThisTime(weekly_time.split("-")[0], weekly_time.split("-")[1]);
-		if (wifi_status.toString().length > 15) {
-			//If the hour goes up/down on the minute, I need to find the terminal wifi state for this hour
-			//Ammend FindTerminalWifiState() to take a variable
-			setChildText("wlan_status", (this_hour == 60 ? "active (scheduled)" : "active") );
-		} else {
-			setChildText("wlan_status", (this_hour <= 0 ? "disabled (scheduled)" : "disabled") );
-		}
-	} else {
-		setChildText("wlan_status", (wifi_status.toString().length > 15 ? "active" : "disabled") );
-	}*/
+
 	UpdateSummary();
 }
 
