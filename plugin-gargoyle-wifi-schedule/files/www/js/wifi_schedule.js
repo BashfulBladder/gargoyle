@@ -33,6 +33,8 @@ var stripped_cron_tabs = [];
 var found_wifi_cron_tabs = [];
 var weekdayperiod = [];
 
+var current_wifi = []; //0=current day, 1=current hour, 2=current minute, 3-translated day, 4 will get filled with scheduled minutes for that hour; 5 will get filled with previous wifi state
+
 var weeklyPeriod = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 var week511Period = ["Sunday", "Monday-Friday", "Saturday"];
 var dailyPeriod = ["Daily"];
@@ -365,7 +367,6 @@ function SetTimerIncrement(timer_option) {
 function SetTimerMode(mode_option) {
 	timerMode=mode_option;
 	new_cron_tabs=[];
-	
 	if (mode_option == 0) {
 		document.getElementById("timer_mode").selectedIndex = 0;
 	}
@@ -498,13 +499,53 @@ function CronTabsToTables() {
 	FinalizeTables(end_state);
 }
 
+function FindThisTime(day_of_week, an_hour) {
+	var this_hour = eval(an_hour);
+	var target_cell = "";
+
+	if (timerMode == 1) { 
+		target_cell=document.getElementById("tab1_timeTable").rows[ (eval(this_hour) < 12 ? 1 : 4) ].cells[ (this_hour < 12 ? this_hour : this_hour-12) ].value;
+	} else if (timerMode == 3) {
+		if (eval(day_of_week) == 0) {
+			target_cell=document.getElementById("tab1_timeTable").rows[ (eval(this_hour) < 12 ? 1 : 4) ].cells[ (this_hour < 12 ? this_hour : this_hour-12) ].value;
+		} else if (eval(day_of_week) == 6) {
+			target_cell=document.getElementById("tab3_timeTable").rows[ (eval(this_hour) < 12 ? 1 : 4) ].cells[ (this_hour < 12 ? this_hour : this_hour-12) ].value;
+		} else {
+			target_cell=document.getElementById("tab2_timeTable").rows[ (eval(this_hour) < 12 ? 1 : 4) ].cells[ (this_hour < 12 ? this_hour : this_hour-12) ].value;
+		}
+	} else if (timerMode == 7) {
+		
+		target_cell=document.getElementById("tab" + (1+eval(day_of_week)) + "_timeTable").rows[ (this_hour < 12 ? 1 : 4) ].cells[ (this_hour < 12 ? this_hour : this_hour-12) ].value;
+	}
+	return target_cell;
+}
+
+function FindThisTimeTwo() {
+	var previous_wifi_state = FindTerminalWifiState(); //cell represents the terminal wifi state of the cycle
+	for ( var i=0; i <= current_wifi[3]; i++ ) {
+		for (var j = 0; j < 24; j++ ) {
+			var acell = document.getElementById("tab" + (1+i) + "_timeTable").rows[ (j < 12 ? 1 : 4) ].cells[ (j < 12 ? j : j-12) ];
+			if (i == current_wifi[3] && j == current_wifi[1]) {
+				current_wifi[4] = acell.value;
+				current_wifi[5] = previous_wifi_state;
+				return;
+			}
+			if (previous_wifi_state < 0 && acell.value >= 60) { previous_wifi_state=1; }
+			if (previous_wifi_state > 0 && acell.value <= 0) { previous_wifi_state=-1; }
+			if (previous_wifi_state > 0 && acell.value >= 0 && acell.value < 60) { previous_wifi_state=-1; }
+			if (previous_wifi_state < 0 && acell.value >= 0 && acell.value < 60) { previous_wifi_state=1; }
+		}
+	}
+}
+
 function LoadCrontabs() {
 	stripped_cron_tabs.length=0;
 	var foundDailySched = 0;
 	var found511Sched = 0;
 	var foundWeekend=0;
+	var foundWeekday=0;
 	var foundWeeklySched = 0;
-	
+
 	InitSummaryText();
 	
 	for ( var i=0; i < raw_cron_data.length; i++ ) {
@@ -524,6 +565,7 @@ function LoadCrontabs() {
 			
 		} else if (found_wifi_cron_tabs[j].split(" ")[4] == "1-5") {
 		 	found511Sched++; //511 (weedkay + sat + sun
+		 	foundWeekday++;
 		} else if (  found_wifi_cron_tabs[j].split(" ")[4].match(/[1-5]/g) >= 0  ) {
 			// there could also be this:   */2    1,2,3,4,5   1-4,5
 			foundWeeklySched++; //weekly
@@ -534,7 +576,7 @@ function LoadCrontabs() {
 	if (foundDailySched && (found511Sched == 0 && foundWeekend == 0 && foundWeeklySched == 0) ) {
 		timerMode=1;
 		document.getElementById("timer_mode").selectedIndex=1;
-	} else if ( (foundWeekend || found511Sched) && (foundWeeklySched == 0) ) {
+	} else if ( foundWeekday || ((foundWeekend || found511Sched) && (foundWeeklySched == 0)) ) {
 		timerMode=3;
 		document.getElementById("timer_mode").selectedIndex=2;
 	} else if (foundWeeklySched || foundWeekend) {
@@ -542,12 +584,57 @@ function LoadCrontabs() {
 		document.getElementById("timer_mode").selectedIndex=3;
 	} //else timerMode remains disabled
 	
-	//AddSummaryText("Mode: " + timerMode + "<br />\n");
-	
 	if (timerMode > 0) {
 		document.getElementById('div_timer_increment').style.display = 'block';
 		CronTabsToTables();
 	}
+	
+	current_wifi[0]=eval(weekly_time.split("-")[0]);
+	current_wifi[1]=eval(weekly_time.split("-")[1]);
+	current_wifi[2]=eval(weekly_time.split("-")[2]);
+	
+	if (timerMode == 1) {
+		current_wifi[3] = 0;
+	} else if (timerMode == 3) {
+		if ( current_wifi[0] >0 && current_wifi[0] < 6) {
+			current_wifi[3] = 1;
+		} else if (current_wifi[0] == 6) {
+			current_wifi[3] = 2;
+		}
+	} else {
+		current_wifi[3] = current_wifi[0];
+	}
+	
+	if (found_wifi_cron_tabs.length > 0 && timerMode > 0) { 
+		FindThisTimeTwo();
+		//AddSummaryText("Current schedule for this hour: " + current_wifi[4] + "-state: " + current_wifi[5] + "<br />\n");
+		if (current_wifi[4] <= 0 || current_wifi[4] >= 60) {
+			setChildText("wlan_status", (current_wifi[5] > 0 ? "active (scheduled)" : "disabled (scheduled)") );
+		} else {
+			if (current_wifi[5] > 0) {
+				//current minutes > scheduled minutes when wifi WAS on during previous hour (minutes on THIS hour mean going down)
+				setChildText("wlan_status", (current_wifi[2] > current_wifi[4] ? "disabled (scheduled)" : "active (scheduled)") );
+			} else {
+				//wifi WAS down previous hour, but minutes on this hour means its going up
+				setChildText("wlan_status", (current_wifi[2] > current_wifi[4] ? "active (scheduled)" : "disabled (scheduled)") );
+			}
+		}
+	} else {
+		setChildText("wlan_status", (wifi_status.toString().length > 15 ? "active" : "disabled") );
+	}
+	
+	/*if (found_wifi_cron_tabs.length > 0 && timerMode > 0) {
+		var this_hour = FindThisTime(weekly_time.split("-")[0], weekly_time.split("-")[1]);
+		if (wifi_status.toString().length > 15) {
+			//If the hour goes up/down on the minute, I need to find the terminal wifi state for this hour
+			//Ammend FindTerminalWifiState() to take a variable
+			setChildText("wlan_status", (this_hour == 60 ? "active (scheduled)" : "active") );
+		} else {
+			setChildText("wlan_status", (this_hour <= 0 ? "disabled (scheduled)" : "disabled") );
+		}
+	} else {
+		setChildText("wlan_status", (wifi_status.toString().length > 15 ? "active" : "disabled") );
+	}*/
 	UpdateSummary();
 }
 
