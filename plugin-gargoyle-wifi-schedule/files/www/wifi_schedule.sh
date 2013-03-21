@@ -3,7 +3,7 @@
 	# This webpage is copyright ¬© 2013 by BashfulBladder 
 	# There is not much to this page, so this is public domain 
 	eval $( gargoyle_session_validator -c "$COOKIE_hash" -e "$COOKIE_exp" -a "$HTTP_USER_AGENT" -i "$REMOTE_ADDR" -r "login.sh" -t $(uci get gargoyle.global.session_timeout) -b "$COOKIE_browser_time"  )
-	gargoyle_header_footer -h -s "connection" -p "wifi_schedule" -c "internal.css" -j "wifi_schedule.js"
+	gargoyle_header_footer -h -s "system" -p "wifi_schedule" -c "internal.css" -j "wifi_schedule.js"
 
 ?>
 
@@ -14,7 +14,6 @@
 	if [ -e /etc/crontabs/root ] ; then
 		awk '{gsub(/"/, "\\\""); print "cron_data.push(\""$0"\");" }' /etc/crontabs/root
 	fi
-	echo "var current_time=\"`date \"+%Y%m%d-%H%M\"`\";"
 	echo "var weekly_time=\"`date \"+%w-%H-%M\"`\";"
 		
 	echo "var wifi_status = new Array();"
@@ -44,6 +43,21 @@ for (tab_idx in cron_data) {
 </style>
 
 <fieldset id="wifi_schedule">
+	<div id='wlan_stat'>
+		<label class='leftcolumn'>Wireless radio(s) status:</label>
+		<span class='rightcolumn' id='wlan_status'></span>
+	</div>
+	
+	<div id='wifi_action' style="margin-top:15px">
+		<label class='leftcolumn' style="margin-top:5px">Stop/Start wireless radios(s)</label>
+		<span class='rightcolumn'>
+			<input type='button' class='default_button' id='wifi_up_button' value="Start Wireless" onclick='GetWifiUpdate("up")'/>
+			<input type='button' class='default_button' id='wifi_down_button' value="Stop Wireless" onclick='GetWifiUpdate("down")'/>
+		</span>
+	</div>
+
+	<div class="internal_divider"></div>
+
 	<legend class="sectionheader">WiFi Schedule</legend>
 	<select id='timer_mode' onchange='SetTimerMode(this.value)'>
 		<option selected value='0'>Disable timer</option>
@@ -53,10 +67,6 @@ for (tab_idx in cron_data) {
 	</select>
 
 	<br/>
-	<div id='wlan_stat'>
-		<label class='leftcolumn'>Wireless radio(s) status:</label>
-		<span class='rightcolumn' id='wlan_status'></span>
-	</div>
 	<br/>
 
 	<div id="div_timer_increment" style="display:none;">
@@ -123,5 +133,5 @@ for (tab_idx in cron_data) {
 </script>
 
 <?
-	gargoyle_header_footer -f -s "connection" -p "wifi_schedule"
+	gargoyle_header_footer -f -s "system" -p "wifi_schedule"
 ?>
