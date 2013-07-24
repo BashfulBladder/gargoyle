@@ -2,26 +2,26 @@
  * UTF-8 (with BOM) Spanish-ES text strings for access.sh html elements
  */
 
-accessStr.Section="Acceso a Interfaz";
-accessStr.WebProtocol="Protocolo por Interfaz Admin";
-accessStr.LocalPort="Puerto Local por HTTP";
-accessStr.Local_S_Port="Puerto Local por HTTPS";
-accessStr.RemoteWebAccess="Acceso Remoto a Interfaz Web Admin";
-accessStr.RemotePort="Puerto Remoto por HTTP";
-accessStr.Remote_S_Port="Puerto Remoto para HTTPS";
-accessStr.Session="Duración de la Web Login Sesión";
+accessStr.Section="Acceso a interfaz web";
+accessStr.WebProtocol="Protocolo para administración web";
+accessStr.LocalPort="Puerto HTTP local";
+accessStr.Local_S_Port="Puerto HTTPS local";
+accessStr.RemoteWebAccess="Acceso remoto a interfaz de administración web";
+accessStr.RemotePort="Puerto HTTP remoto";
+accessStr.Remote_S_Port="Puerto HTTPS remoto";
+accessStr.Session="Duración del login en sesión web";
 accessStr.DisablePassword="Desactivar la protección por contraseña de la interfaz web";
-accessStr.warning="¡No lo recomiendo!";
-accessStr.SSHAccess="Acceso por SSH";
-accessStr.LocalSSHPort="Puerto Local por SSH";
-accessStr.EnableRemoteAccess="Habilitar Acceso Remoto SSH";
-accessStr.RemoteSSHPort="Puerto Remoto por SSH";
-accessStr.MaxRemoteTries="Intentos de Conexión Remotos Máximos";
+accessStr.warning="¡No es recomendado!";
+accessStr.SSHAccess="Acceso SSH";
+accessStr.LocalSSHPort="Puerto SSH local";
+accessStr.EnableRemoteAccess="Habilitar acceso remoto mediante SSH";
+accessStr.RemoteSSHPort="Puerto SSH remoto";
+accessStr.MaxRemoteTries="Cantidad máxima de intentos de ingresos remotos";
 accessStr.Attempts="Intento(s) cada cinco minutos";
 accessStr.Unlimited="Intentos ilimitados";
-accessStr.ChangePass="Cambiar La Contraseña del Administrador";
-accessStr.NewPass="Nueva Contraseña";
-accessStr.ConfirmPass="Confirmar Contraseña";
+accessStr.ChangePass="Cambiar contraseña de administrador";
+accessStr.NewPass="Nueva contraseña";
+accessStr.ConfirmPass="Confirmar contraseña";
 
 //javascript
-accessStr.PasswordsDiffer="Contraseña de administrador no se puede confirmar. Contraseñas especificadas no son iguales.";
+accessStr.PasswordsDiffer="La contraseña de administrador no pudo ser confirmada. Las contraseñas especificadas no coinciden.";

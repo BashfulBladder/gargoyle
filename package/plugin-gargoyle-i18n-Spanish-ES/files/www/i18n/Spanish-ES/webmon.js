@@ -2,20 +2,20 @@
  * UTF-8 (with BOM) English-EN text strings for webmon.sh html elements
  */
 
-webmS.PrSect="Monitor de Preferencias Web";
-webmS.EMon="Habilitar Monitor de Uso Web";
-webmS.NumSt="Número de Sitios para Guardar";
-webmS.NumSr="Número de Búsquedas para Guardar";
-webmS.MnAH="Monitorizar Todos Anfitriones";
-webmS.MnOnly="Monitorizar Anfitriones Sólo Debajo";
-webmS.MnExcl="Excluir Anfitriones Debajo De Monitoreo";
-webmS.SpcIP="Especifique el rango de IP o IP";
-webmS.RctSt="Sitios Visitados Recientemente";
-webmS.RctSr="Búsquedas Recientes Web";
-webmS.DlWD="Descarga de Datos de Uso Web";
-webmS.cmsep="Los datos son separadas por comas";
-webmS.dForm="[Hora de la última visita],[IP Local],[Dominio Visitados/Solicitud de Búsqueda]";
-webmS.VSit="Dominio Visitados";
-webmS.SRqst="Solicitud de Búsqueda";
-webmS.dCol=['Anfitriones Local', 'Hora del Ultimo Acceso', 'Sitio Web'];
-webmS.sCol=['Anfitriones Local', 'Hora del Ultimo Acceso', 'Búsqueda de Texto'];
+webmS.PrSect="Preferencias del monitor web";
+webmS.EMon="Activar monitor de uso web";
+webmS.NumSt="Número de sitios a guardar";
+webmS.NumSr="Número de búsquedas a guardar";
+webmS.MnAH="Monitorear todos los equipos";
+webmS.MnOnly="Monitorear sólo los siguientes equipos";
+webmS.MnExcl="Excluir los siguientes equipos del monitoreo";
+webmS.SpcIP="Especifique IP o rango de IP";
+webmS.RctSt="Sitios visitados recientemente";
+webmS.RctSr="Búsquedas web recientes";
+webmS.DlWD="Descargar datos de uso web";
+webmS.cmsep="Los datos son separados por comas";
+webmS.dForm="[Hora de la última visita],[IP local],[Dominio visitado/Solicitud de búsqueda]";
+webmS.VSit="Dominios visitados";
+webmS.SRqst="Solicitudes de búsqueda";
+webmS.dCol=['Equipo local', 'Hora de último acceso', 'Sitio web'];
+webmS.sCol=['Equipo local', 'Hora de último acceso', 'Texto de búsqueda'];

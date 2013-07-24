@@ -2,11 +2,11 @@
  * UTF-8 (with BOM) Spanish-ES text strings for firstboot.sh html elements
  */
 
-fbS.ISSect="Ajustes Iniciales";
-fbS.npass="Introduzca una nueva contraseña ahora";
-fbS.NPass="Nueva Contraseña";
+fbS.ISSect="Ajustes iniciales";
+fbS.npass="Ingrese una nueva contraseña ahora";
+fbS.NPass="Nueva contraseña";
 fbS.Stz="Seleccione su zona horaria";
-fbS.SSet="Guardar Ajustes";
+fbS.SSet="Guardar ajustes";
 
 //javascript
 fbS.nopsErr="ERROR: Debe especificar una contraseña";
